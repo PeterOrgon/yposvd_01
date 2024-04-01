@@ -1,0 +1,9 @@
+@EndUserText.label: 'Event Service'
+define service YPOSVD_EVENT_SRV {
+  expose yposvd_c_event_d    as Event;
+  expose yposvd_c_wishlist_d as Wishlist;
+  expose yposvd_c_wish_d     as Wish;
+  expose yposvd_i_person_vh  as Person;
+  expose yposvd_i_product_vh as Product;
+  expose I_CurrencyStdVH     as Currency;
+}

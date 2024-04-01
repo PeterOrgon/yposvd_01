@@ -1,0 +1,39 @@
+projection;
+strict ( 2 );
+use draft;
+
+define behavior for yposvd_c_event_d alias Event
+{
+  use create;
+  use update;
+  use delete;
+
+  use action activateEvent;
+  use action cancelEvent;
+
+  use action Resume;
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Prepare;
+
+  use association _Wishlist { create; with draft; }
+}
+
+define behavior for yposvd_c_wishlist_d alias Wishlist
+{
+  use update;
+  use delete;
+
+  use association _Wish { create; with draft; }
+  use association _Event { with draft; }
+}
+
+define behavior for yposvd_c_wish_d alias Wish
+{
+  use update;
+  use delete;
+
+  use association _Event { with draft; }
+  use association _Wishlist { with draft; }
+}

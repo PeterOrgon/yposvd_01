@@ -1,0 +1,53 @@
+@Metadata.layer: #CORE 
+
+@UI: { headerInfo: { typeName:       'Wish',
+                     typeNamePlural: 'Wishes',
+                     title:          { type: #STANDARD,
+                                       label: 'Wish',
+                                       value: 'WishID' } } }
+
+
+annotate entity yposvd_c_wish_d
+    with 
+{
+  @UI.facet: [ { id:              'Wish',
+                 purpose:         #STANDARD,
+                 type:            #IDENTIFICATION_REFERENCE,
+                 label:           'Wish',
+                 position:        10 }  ]
+  @UI.hidden:true
+  WishUUID;
+  @UI.hidden:true
+  WishlistUUID;
+  @UI.hidden:true
+  EventUUID;
+
+
+  @UI: { lineItem:       [ { position: 10, importance: #HIGH } ],
+         identification: [ { position: 10 } ] }
+  WishID;
+
+  @UI: { lineItem:       [ { position: 20, importance: #HIGH } ] ,
+         identification: [ { position: 20, label: 'Name' } ] }
+  Name;
+
+  @UI: { lineItem:       [ { position: 30, importance: #MEDIUM } ] ,
+         identification: [ { position: 30, label: 'Description' } ] }
+  Description;   
+
+  @UI: { lineItem:       [ { position: 40, importance: #HIGH } ],
+         identification: [ { position: 40, label: 'Product' } ],
+         selectionField: [{ position: 40 }],
+         textArrangement: #TEXT_FIRST }
+  ProductID;
+
+  @UI: { lineItem:       [ { position: 50, importance: #HIGH } ],
+         identification: [ { position: 50, label: 'Person' } ],
+         selectionField: [{ position: 50 }],
+         textArrangement: #TEXT_FIRST }
+  PersonID;
+
+  @UI.hidden: true
+  LocalLastChangedAt;
+    
+}

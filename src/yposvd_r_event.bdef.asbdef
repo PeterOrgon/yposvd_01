@@ -1,0 +1,124 @@
+managed;
+strict ( 2 );
+with draft;
+
+define behavior for yposvd_r_event alias Event
+implementation in class zbp_posvd_r_event unique
+persistent table yposvd_event
+draft table yposvd_d_event
+lock master total etag LastChangedAt
+authorization master ( global, instance )
+etag master LocalLastChangedAt
+
+{
+  create;
+  update;
+  delete;
+  association _Wishlist { create ( features : instance, authorization : update ); with draft; }
+  field ( numbering : managed, readonly ) EventUUID;
+  field ( readonly ) EventID, Status, LocalCreatedAt, LocalCreatedBy, LocalLastChangedAt, LocalLastChangedBy;
+
+  action ( features : instance, authorization : update ) activateEvent result [1] $self;
+  action ( features : instance, authorization : update ) cancelEvent result [1] $self;
+
+  determination setEventNumber on save { create; }
+  determination setStatusToNew on modify { create; }
+
+  draft action Resume;
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+
+  draft determine action Prepare
+  {
+    validation Wish~validateProduct;
+    validation Wish~validatePerson;
+  }
+
+  mapping for yposvd_event
+    {
+      EventUUID          = event_uuid;
+      EventID            = event_id;
+      Name               = name;
+      Status             = status;
+      Description        = description;
+      LocalCreatedAt     = local_created_at;
+      LocalCreatedBy     = local_created_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LastChangedAt      = last_changed_at;
+    }
+}
+
+define behavior for yposvd_r_wishlist alias Wishlist
+implementation in class zbp_posvd_r_wishlist unique
+persistent table yposvd_wishlist
+draft table yposvd_d_wishlst
+lock dependent by _Event
+authorization dependent by _Event
+etag master LocalLastChangedAt
+{
+  update;
+  delete;
+  field ( numbering : managed, readonly ) WishlistUUID;
+  field ( readonly ) EventUUID, LocalCreatedAt, WishlistID, LocalCreatedBy, LocalLastChangedAt, LocalLastChangedBy;
+
+  determination setWishlistNumber on save { create; }
+
+  association _Wish { create ( authorization : update ); with draft; }
+  association _Event { with draft; }
+
+  mapping for yposvd_wishlist
+    {
+      WishlistUUID       = wishlist_uuid;
+      EventUUID          = parent_uuid;
+      WishlistID         = wishlist_id;
+      Name               = name;
+      Description        = description;
+      LocalCreatedAt     = local_created_at;
+      LocalCreatedBy     = local_created_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LastChangedAt      = last_changed_at;
+    }
+}
+
+define behavior for yposvd_r_wish alias Wish
+implementation in class zbp_posvd_r_wish unique
+persistent table yposvd_wish
+draft table yposvd_d_wish
+lock dependent by _Event
+authorization dependent by _Event
+etag master LocalLastChangedAt
+{
+  update;
+  delete;
+  field ( numbering : managed, readonly ) WishUUID;
+  field ( readonly ) EventUUID, WishlistUUID, WishID, LocalCreatedAt, LocalCreatedBy, LocalLastChangedAt, LocalLastChangedBy;
+  field ( mandatory ) ProductID, PersonID;
+
+  determination setWishNumber on save { create; }
+
+  validation validateProduct on save { create; update; field ProductID; }
+  validation validatePerson on save { create; update; field PersonID; }
+
+  association _Event { with draft; }
+  association _Wishlist { with draft; }
+
+  mapping for yposvd_wish
+    {
+      WishUUID           = wish_uuid;
+      EventUUID          = root_uuid;
+      WishlistUUID       = parent_uuid;
+      WishID             = wish_id;
+      Name               = name;
+      Description        = description;
+      ProductID          = product_id;
+      PersonID           = person_id;
+      LocalCreatedAt     = local_created_at;
+      LocalCreatedBy     = local_created_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LastChangedAt      = last_changed_at;
+    }
+}

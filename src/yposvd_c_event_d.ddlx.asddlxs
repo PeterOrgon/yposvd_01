@@ -1,0 +1,49 @@
+@Metadata.layer: #CORE
+
+@UI: { headerInfo: { typeName: 'Event',
+                     typeNamePlural: 'Events',
+                     title: { type: #STANDARD, value: 'EventID' } },
+       presentationVariant: [{ sortOrder: [{ by: 'EventID', direction: #DESC }], visualizations: [{type: #AS_LINEITEM}]  }] }
+
+annotate entity yposvd_c_event_d
+    with 
+{
+  @UI.facet: [{ id:            'Event',
+                purpose:       #STANDARD,
+                type:          #IDENTIFICATION_REFERENCE,
+                label:         'Event',
+                position:      10 },
+              { id:            'Wishlist',
+                purpose:       #STANDARD,
+                type:          #LINEITEM_REFERENCE,
+                label:         'Wishlist',
+                position:      20,
+                targetElement: '_Wishlist'}]
+  @UI.hidden: true
+  EventUUID;
+
+  @UI: { lineItem:       [ { position: 10, importance: #HIGH },
+                           { type: #FOR_ACTION, dataAction: 'activateEvent', label: 'Activate Event' },
+                           { type: #FOR_ACTION, dataAction: 'cancelEvent', label: 'Cancel Event' } ],
+         identification: [ { position: 10, label: 'Event ID' },
+                           { type: #FOR_ACTION, dataAction: 'activateEvent', label: 'Activate Event' },
+                           { type: #FOR_ACTION, dataAction: 'cancelEvent', label: 'Cancel Event' } ],
+         selectionField: [ { position: 10 } ] }
+  EventID;
+    
+  @UI: { lineItem:       [ { position: 20, importance: #MEDIUM } ] ,
+         identification: [ { position: 20, label: 'Name' } ] }
+  Name;
+
+  @UI: { lineItem:       [ { position: 30, importance: #MEDIUM } ] ,
+         identification: [ { position: 30, label: 'Description' } ] }
+  Description;
+
+  @UI: { lineItem:       [ { position: 40, importance: #HIGH } ] ,
+         identification: [ { position: 40, label: 'Status' } ] }
+  Status;
+
+  @UI.hidden: true
+  LocalLastChangedAt;
+    
+}

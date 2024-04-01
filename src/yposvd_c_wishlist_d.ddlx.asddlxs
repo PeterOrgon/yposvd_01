@@ -1,0 +1,42 @@
+@Metadata.layer: #CORE
+
+@UI: { headerInfo: { typeName: 'Wishlist',
+                     typeNamePlural: 'Wishlists',
+                     title: { type: #STANDARD, value: 'WishlistID' } } }
+
+annotate entity yposvd_c_wishlist_d
+    with 
+{
+  @UI.facet: [ { id:            'Wishlist',
+                 purpose:       #STANDARD,
+                 type:          #IDENTIFICATION_REFERENCE,
+                 label:         'Wishlist',
+                 position:      10 },
+               { id:            'Wish',
+                 purpose:       #STANDARD,
+                 type:          #LINEITEM_REFERENCE,
+                 label:         'Wish',
+                 position:      20,
+                 targetElement: '_Wish'} ]
+  @UI.hidden: true
+  WishlistUUID;
+    
+  @UI.hidden: true
+  EventUUID;
+
+  @UI: { lineItem:       [ { position: 20, importance: #HIGH } ],
+         identification: [ { position: 20 } ] }
+  WishlistID;    
+    
+  @UI: { lineItem:       [ { position: 80, importance: #HIGH } ] ,
+         identification: [ { position: 80, label: 'Name'  } ] }
+  Name;
+
+  @UI: { lineItem:       [ { position: 90, importance: #MEDIUM } ] ,
+         identification: [ { position: 90, label: 'Description'  } ] }
+  Description;    
+        
+  @UI.hidden: true
+  LocalLastChangedAt;    
+    
+}
